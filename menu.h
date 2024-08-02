@@ -1,16 +1,17 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include "resources.h"
+#include "button.h"
 #include "game.h"
 
 class menu final : public game{
-    void init() override;
 public:
     menu();
-    void update() override;
-    void render() override;
-    void eventhandle() override;
+    void update(sf::RenderWindow &window) override;
+    void render(sf::RenderWindow &window) override;
+    void eventhandle(sf::RenderWindow &window) override;
+
+    menu(const sf::RenderWindow &window);
     sf::Font font;
     Button button1,button2,button3;
 };

@@ -1,12 +1,6 @@
 #include "game.h"
 
-void game::init() {
-    videomode.height = 800;
-    videomode.width = 1200;
-    window.create(videomode,"New Game",sf::Style::Titlebar | sf::Style::Close);
-}
-
-void game::eventhandle() {
+void game::eventhandle(sf::RenderWindow &window) {
     while (window.pollEvent(ev)) {
         if (ev.type == sf::Event::Closed) {
             window.close();
@@ -14,14 +8,16 @@ void game::eventhandle() {
     }
 }
 
-void game::update() {
+void game::update(sf::RenderWindow &window) {
 }
 
-void game::render() {
+void game::render(sf::RenderWindow &window) {
 }
 
-game::game() {
-    game::init();
+game::game(const sf::RenderWindow &window) {
+    const sf::Vector2u size = window.getSize();
+    center[0] = size.x/2;
+    center[1] = size.y/2;
 }
 game::~game() = default;
 

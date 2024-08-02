@@ -8,16 +8,14 @@
 #include <SFML/Network.hpp>
 
 class game {
-    virtual void init();
 public:
-    sf::VideoMode videomode;
-    sf::RenderWindow window{};
     sf::Event ev{};
-    sf::ContextSettings settings;
-    virtual void eventhandle();
-    virtual void update();
-    virtual void render();
-    game();
+    int center[2];
+    virtual void eventhandle(sf::RenderWindow &window);
+    virtual void update(sf::RenderWindow &window);
+    virtual void render(sf::RenderWindow &window);
+
+    game(const sf::RenderWindow &window);
     virtual ~game();
 };
 
