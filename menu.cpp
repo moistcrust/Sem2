@@ -25,7 +25,7 @@ void menu::update(sf::RenderWindow &window) {
         }
         else {
             if(button.isMoved) {
-                button.buttonMove(10,2);
+                button.buttonMove(10,3);
                 button.isMoved = false;
                 button.setScale(buttonscale[0],buttonscale[1]);
             }
