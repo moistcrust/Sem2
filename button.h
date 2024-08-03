@@ -19,7 +19,7 @@ public:
 
     virtual void animate(); //overridable
 
-    bool isClicked(float x, float y) const;
+    bool isClicked(int x, int y) const;
 private:
     float positionchanged = 0;
     float increment = 1;

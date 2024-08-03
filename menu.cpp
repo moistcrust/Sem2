@@ -14,6 +14,11 @@ void menu::update(sf::RenderWindow &window) {
     window.clear(sf::Color::Black);
     animate_background();
     for (auto& button: buttons) {
+        if(isMousedpressed) {
+          if (button.isClicked(mouse_pos[0],mouse_pos[1])) {
+              continue;
+          }
+        };
         button.animate();
     }
 }
@@ -31,15 +36,22 @@ void menu::render(sf::RenderWindow &window) {
 
 void menu::eventhandle(sf::RenderWindow &window) {
     while (window.pollEvent(ev)) {
+        mouse_pos[0] = sf::Mouse::getPosition(window).x;
+        mouse_pos[1] = sf::Mouse::getPosition(window).y;
         if (ev.type == sf::Event::Closed) {
             window.close();
         }
         if (ev.type == sf::Event::MouseButtonPressed) {
             if (ev.mouseButton.button == sf::Mouse::Left) {
-                if (music_button.isClicked(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y)) {
+                isMousedpressed = true;
+                if (music_button.isClicked(mouse_pos[0],mouse_pos[1])) {
                     isMute = (not isMute);
-
                 }
+            }
+        }
+        if (ev.type == sf::Event::MouseButtonReleased) {
+            if (ev.mouseButton.button == sf::Mouse::Left) {
+                isMousedpressed = false;
             }
         }
     }
@@ -88,6 +100,7 @@ menu::menu() {
         buttons[i].setText("Game", font);
     }
     isMute = false;
+    isMousedpressed = false;
     music.openFromFile("audio.ogg");
     music.setLoop(true);
     music.play();

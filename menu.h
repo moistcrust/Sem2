@@ -21,6 +21,9 @@ public:
     Button music_button;
     bool isMute;
 
+    int mouse_pos[2];
+    bool isMousedpressed;
+
     void update(sf::RenderWindow &window) override;
     void render(sf::RenderWindow &window) override;
     void eventhandle(sf::RenderWindow &window) override;

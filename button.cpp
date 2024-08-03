@@ -41,6 +41,6 @@ void Button::animate() {
     positionchanged = .02 * increment + positionchanged;
 }
 
-bool Button::isClicked(float x, float y) const {
+bool Button::isClicked(int x, int y) const {
     return sprite.getGlobalBounds().contains(x,y);
 }
