@@ -4,11 +4,12 @@
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(1200,800),"New Game",sf::Style::Titlebar | sf::Style::Close);
-    menu game;
+    Game *game = new menu;
     while (window.isOpen()) {
-        game.eventhandle(window);
-        game.update(window);
-        game.render(window);
+        game->eventhandle(window);
+        game->update(window);
+        game->render(window);
     }
+    delete game;
     return 0;
 }
