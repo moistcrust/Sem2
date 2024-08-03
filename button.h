@@ -5,6 +5,8 @@
 
 class Button {
 public:
+    virtual ~Button();
+
     sf::Sprite sprite;
     Button();
 
@@ -13,10 +15,10 @@ public:
     void setScale(float x, float y);
     void setTexture(const sf::Texture &texture);
 
-    void animate();
+    virtual void animate(); //overridable
 private:
     float positionchanged = 0;
-    float increment = .01;
+    float increment = 1;
 };
 
 #endif // BUTTON_HPP

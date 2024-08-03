@@ -1,5 +1,7 @@
 #include "Button.h"
 
+Button::~Button() = default;
+
 Button::Button() = default;
 
 Button::Button(const sf::Texture& texture, float x, float y, float widthscale = 1, float heightscale = 1) {
@@ -20,12 +22,12 @@ void Button::setTexture(const sf::Texture &texture) {
 }
 
 void Button::animate() {
-    if (positionchanged > 2) {
-        increment = -0.01;
+    if (positionchanged > 4) {
+        increment = -1;
     }
-    else if(positionchanged < -2) {
-        increment = 0.01;
+    else if(positionchanged < -4) {
+        increment = 1;
     }
-    sprite.move(0,increment);
-    positionchanged = increment + positionchanged;
+    sprite.move(0, .02 * increment);
+    positionchanged = .02 * increment + positionchanged;
 }

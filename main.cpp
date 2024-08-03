@@ -4,7 +4,7 @@
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(1200,800),"New Game",sf::Style::Titlebar | sf::Style::Close);
-    menu game{};
+    menu game;
 
     while (window.isOpen()) {
         game.eventhandle(window);
