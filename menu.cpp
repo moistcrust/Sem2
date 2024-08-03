@@ -4,17 +4,20 @@
 
 #include "menu.h"
 
-void menu::update() {
+void menu::update(sf::RenderWindow &window) {
+    window.clear(sf::Color::Black);
+    animate_background();
+    for (auto& button: buttons) {
+        button.animate();
+    }
 }
 
 void menu::render(sf::RenderWindow &window) {
     Game::render(window);
-    window.clear(sf::Color::Black);
-    animate_background();
     window.draw(background_sprite);
     for (auto& button : buttons) {
-        button.animate();
         window.draw(button.sprite);
+        window.draw(button.text);
     }
     window.display();
 }
@@ -50,12 +53,14 @@ menu::menu() {
     background_sprite.setPosition(bg_pos[0],bg_pos[1]);
     background_sprite.setScale(.4,.4);
 
+    font.loadFromFile("KnightWarrior-w16n8.otf");
 
     button_texture.loadFromFile("button.png");
     button.setTexture(button_texture);
 
     for (int i = 0;i<4;i++) {
         buttons.emplace_back(button_texture, 500, 200+80*i,200/button.sprite.getLocalBounds().width,60/button.sprite.getLocalBounds().height);
+        buttons[i].setText("Game",font);
     }
 }
 

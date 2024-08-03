@@ -7,6 +7,7 @@ class Button {
 public:
     virtual ~Button();
 
+    sf::Text text;
     sf::Sprite sprite;
     Button();
 
@@ -14,6 +15,7 @@ public:
     void setPosition(float x, float y);
     void setScale(float x, float y);
     void setTexture(const sf::Texture &texture);
+    void setText(const std::string &str, const sf::Font &font);
 
     virtual void animate(); //overridable
 private:

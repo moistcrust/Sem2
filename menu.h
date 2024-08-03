@@ -12,8 +12,8 @@ public:
     sf::Texture button_texture;
     Button button;
     std::vector<Button> buttons;
-    sf::Clock clock;
-    void update() override;
+    sf::Font font;
+    void update(sf::RenderWindow &window) override;
     void render(sf::RenderWindow &window) override;
     void eventhandle(sf::RenderWindow &window) override;
     void animate_background();

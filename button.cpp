@@ -21,6 +21,14 @@ void Button::setTexture(const sf::Texture &texture) {
     sprite.setTexture(texture);
 }
 
+void Button::setText(const std::string &str, const sf::Font &font) {
+    text.setFont(font);
+    text.setString(str);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(sprite.getPosition().x+70,sprite.getPosition().y+10);
+    text.setScale(.8,.8);
+}
+
 void Button::animate() {
     if (positionchanged > 4) {
         increment = -1;
@@ -29,5 +37,6 @@ void Button::animate() {
         increment = 1;
     }
     sprite.move(0, .02 * increment);
+    text.move(0,0.02*increment);
     positionchanged = .02 * increment + positionchanged;
 }
