@@ -22,22 +22,19 @@ void menu::render(sf::RenderWindow &window) {
 void menu::eventhandle(sf::RenderWindow &window) {
     Game::eventhandle(window);
 }
-#include <iostream>
+
 void menu::animate_background() {
     // Define the movement boundaries
     int max_x = background_texture.getSize().x * 0.4 - 1200;
     int max_y = background_texture.getSize().y * 0.4 - 800;
 
-    // Debugging output
-    std::cout << "bg_pos[0]: " << bg_pos[0] << ", bg_pos[1]: " << bg_pos[1] << std::endl;
-
-    if (-bg_pos[0] < max_x && bg_pos[1] == 0) {
+    if (-bg_pos[0] < max_x && int(bg_pos[1]) == 0) {
         bg_pos[0] -= 0.1; // Move right
-    } else if (-bg_pos[0] >= max_x && -bg_pos[1] < max_y) {
+    } else if (int(-bg_pos[0]) == max_x && -bg_pos[1] < max_y) {
         bg_pos[1] -= 0.1; // Move down
-    } else if (-bg_pos[0] > 0 && -bg_pos[1] >= max_y) {
+    } else if (-bg_pos[0] > 0 && int(-bg_pos[1]) == max_y) {
         bg_pos[0] += 0.1; // Move left
-    } else if (bg_pos[0] >= 0 && -bg_pos[1] > 0) {
+    } else if (int(-bg_pos[0]) == 0 && -bg_pos[1] > 0) {
         bg_pos[1] += 0.1; // Move up
     }
 
@@ -57,7 +54,7 @@ menu::menu() {
     button_texture.loadFromFile("button.png");
     button.setTexture(button_texture);
 
-    for (int i = 0;i<3;i++) {
+    for (int i = 0;i<4;i++) {
         buttons.emplace_back(button_texture, 500, 200+80*i,200/button.sprite.getLocalBounds().width,60/button.sprite.getLocalBounds().height);
     }
 }
