@@ -15,7 +15,7 @@ public:
     Button button;
     std::vector<Button> buttons;
     sf::Font font;
-    float buttonscale[2];
+    float buttonscale[2]{};
 
     sf::Texture music_texture;
     sf::Music music;

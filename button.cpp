@@ -30,10 +30,10 @@ void Button::setText(const std::string &str, const sf::Font &font) {
 }
 
 void Button::animate() {
-    if (positionchanged > 3) {
+    if (positionchanged > 5) {
         increment = -1;
     }
-    else if(positionchanged < -3) {
+    else if(positionchanged < -5) {
         increment = 1;
     }
     sprite.move(0, .02 * increment);

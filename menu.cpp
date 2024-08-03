@@ -22,6 +22,13 @@ void menu::update(sf::RenderWindow &window) {
                     button.isMoved = true;
                 }
             }
+            else {
+                if(button.isMoved) {
+                    button.buttonMove(10,3);
+                    button.isMoved = false;
+                    button.setScale(buttonscale[0],buttonscale[1]);
+                }
+            }
         }
         else {
             if(button.isMoved) {
