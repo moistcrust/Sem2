@@ -40,3 +40,7 @@ void Button::animate() {
     text.move(0,0.02*increment);
     positionchanged = .02 * increment + positionchanged;
 }
+
+bool Button::isClicked(float x, float y) const {
+    return sprite.getGlobalBounds().contains(x,y);
+}

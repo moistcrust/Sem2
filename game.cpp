@@ -8,7 +8,7 @@ void Game::eventhandle(sf::RenderWindow &window) {
     }
 }
 
-void Game::update() {
+void Game::update(sf::RenderWindow &window) {
 }
 
 void Game::render(sf::RenderWindow &window) {

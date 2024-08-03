@@ -11,7 +11,7 @@ class Game {
 public:
     sf::Event ev{};
     virtual void eventhandle(sf::RenderWindow &window);
-    virtual void update();
+    virtual void update(sf::RenderWindow &window);
     virtual void render(sf::RenderWindow &window);
     virtual ~Game();
 };

@@ -18,6 +18,8 @@ public:
     void setText(const std::string &str, const sf::Font &font);
 
     virtual void animate(); //overridable
+
+    bool isClicked(float x, float y) const;
 private:
     float positionchanged = 0;
     float increment = 1;

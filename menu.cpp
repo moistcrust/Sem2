@@ -5,6 +5,12 @@
 #include "menu.h"
 
 void menu::update(sf::RenderWindow &window) {
+    if (isMute) {
+        music.setVolume(0);
+    }
+    else {
+        music.setVolume(100);
+    }
     window.clear(sf::Color::Black);
     animate_background();
     for (auto& button: buttons) {
@@ -15,6 +21,7 @@ void menu::update(sf::RenderWindow &window) {
 void menu::render(sf::RenderWindow &window) {
     Game::render(window);
     window.draw(background_sprite);
+    window.draw(music_button.sprite);
     for (auto& button : buttons) {
         window.draw(button.sprite);
         window.draw(button.text);
@@ -23,7 +30,19 @@ void menu::render(sf::RenderWindow &window) {
 }
 
 void menu::eventhandle(sf::RenderWindow &window) {
-    Game::eventhandle(window);
+    while (window.pollEvent(ev)) {
+        if (ev.type == sf::Event::Closed) {
+            window.close();
+        }
+        if (ev.type == sf::Event::MouseButtonPressed) {
+            if (ev.mouseButton.button == sf::Mouse::Left) {
+                if (music_button.isClicked(sf::Mouse::getPosition(window).x,sf::Mouse::getPosition(window).y)) {
+                    isMute = (not isMute);
+
+                }
+            }
+        }
+    }
 }
 
 void menu::animate_background() {
@@ -50,18 +69,30 @@ void menu::animate_background() {
 menu::menu() {
     background_texture.loadFromFile("background.png");
     background_sprite.setTexture(background_texture);
-    background_sprite.setPosition(bg_pos[0],bg_pos[1]);
-    background_sprite.setScale(.4,.4);
+    background_sprite.setPosition(bg_pos[0], bg_pos[1]);
+    background_sprite.setScale(.4, .4);
 
     font.loadFromFile("KnightWarrior-w16n8.otf");
+
+    music_texture.loadFromFile("speaker.png");
+    music_button.setTexture(music_texture);
+    music_button.setPosition(0,0);
+    music_button.setScale(50/music_button.sprite.getLocalBounds().width,50/music_button.sprite.getLocalBounds().height);
 
     button_texture.loadFromFile("button.png");
     button.setTexture(button_texture);
 
-    for (int i = 0;i<4;i++) {
-        buttons.emplace_back(button_texture, 500, 200+80*i,200/button.sprite.getLocalBounds().width,60/button.sprite.getLocalBounds().height);
-        buttons[i].setText("Game",font);
+    for (int i = 0; i < 4; i++) {
+        buttons.emplace_back(button_texture, 500, 200 + 80 * i, 200 / button.sprite.getLocalBounds().width,
+                             60 / button.sprite.getLocalBounds().height);
+        buttons[i].setText("Game", font);
     }
+    isMute = false;
+    music.openFromFile("audio.ogg");
+    music.setLoop(true);
+    music.play();
 }
 
-menu::~menu() = default;
+menu::~menu() {
+    music.stop();
+};
