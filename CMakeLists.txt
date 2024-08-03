@@ -1,17 +1,17 @@
 cmake_minimum_required(VERSION 3.28)
-project(four)
+project(game)
 
 set(CMAKE_CXX_STANDARD 17)
 
 # Add executable
-add_executable(four
-        game.h
-        game.cpp
+add_executable(game
         main.cpp
-        button.h
-        button.cpp
-        menu.h
+        game.cpp
+        game.h
         menu.cpp
+        menu.h
+        button.cpp
+        button.h
 )
 
 # Set SFML directory
@@ -29,7 +29,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     find_package(SFML COMPONENTS graphics window system audio network REQUIRED)
 
     # Link SFML static libraries
-    target_link_libraries(four sfml-graphics sfml-window sfml-system sfml-audio sfml-network)
+    target_link_libraries(game sfml-graphics sfml-window sfml-system sfml-audio sfml-network)
 
     # Set static linking flags
     set(CMAKE_CXX_STANDARD_LIBRARIES "-static-libgcc -static-libstdc++ -lwsock32 -lws2_32 ${CMAKE_CXX_STANDARD_LIBRARIES}")
@@ -39,7 +39,7 @@ else()
     find_package(SFML COMPONENTS graphics window system audio network REQUIRED)
 
     # Link SFML dynamic libraries
-    target_link_libraries(four sfml-graphics sfml-window sfml-system sfml-audio sfml-network)
+    target_link_libraries(game sfml-graphics sfml-window sfml-system sfml-audio sfml-network)
 
     # Ensure the SFML DLLs are found at runtime
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)

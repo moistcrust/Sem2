@@ -7,16 +7,13 @@
 #include <SFML/System.hpp>
 #include <SFML/Network.hpp>
 
-class game {
+class Game {
 public:
     sf::Event ev{};
-    int center[2];
     virtual void eventhandle(sf::RenderWindow &window);
-    virtual void update(sf::RenderWindow &window);
+    virtual void update();
     virtual void render(sf::RenderWindow &window);
-
-    game(const sf::RenderWindow &window);
-    virtual ~game();
+    virtual ~Game();
 };
 
 #endif

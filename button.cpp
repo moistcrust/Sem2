@@ -1,22 +1,31 @@
-#include "button.h"
-#include <iostream>
+#include "Button.h"
 
-Button::Button(float x, float y, float width, float height, const sf::Font& font, const std::string& textString) {
-    shape.setPosition(sf::Vector2f(x, y));
-    shape.setSize(sf::Vector2f(width, height));
-    shape.setFillColor(sf::Color::Blue);
+Button::Button() = default;
 
-    text.setFont(font);
-    text.setString(textString);
-    text.setCharacterSize(24);
-    text.setFillColor(sf::Color::White);
-    text.setPosition(
-        x + (width - text.getLocalBounds().width) / 2,
-        y + (height - text.getLocalBounds().height) / 2 - 10
-    );
+Button::Button(const sf::Texture& texture, float x, float y, float widthscale = 1, float heightscale = 1) {
+    sprite.setTexture(texture);
+    sprite.setPosition(x , y);
+    sprite.setScale(widthscale,heightscale);
+}
+void Button::setPosition(float x, float y) {
+    sprite.setPosition(x, y);
 }
 
-Button::Button() {
+void Button::setScale(float x, float y) {
+    sprite.setScale(x,y);
 }
 
+void Button::setTexture(const sf::Texture &texture) {
+    sprite.setTexture(texture);
+}
 
+void Button::animate() {
+    if (positionchanged > 2) {
+        increment = -0.01;
+    }
+    else if(positionchanged < -2) {
+        increment = 0.01;
+    }
+    sprite.move(0,increment);
+    positionchanged = increment + positionchanged;
+}

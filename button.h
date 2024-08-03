@@ -1,15 +1,22 @@
-#ifndef BUTTON_H
-#define BUTTON_H
+#ifndef BUTTON_HPP
+#define BUTTON_HPP
 
 #include <SFML/Graphics.hpp>
-#include <string>
 
 class Button {
 public:
-    Button(float x, float y, float width, float height, const sf::Font& font, const std::string& textString);
+    sf::Sprite sprite;
     Button();
-    sf::RectangleShape shape;
-    sf::Text text;
+
+    Button(const sf::Texture &texture, float x , float y,float widthscale,float heightscale );
+    void setPosition(float x, float y);
+    void setScale(float x, float y);
+    void setTexture(const sf::Texture &texture);
+
+    void animate();
+private:
+    float positionchanged = 0;
+    float increment = .01;
 };
 
-#endif // BUTTON_H
+#endif // BUTTON_HPP

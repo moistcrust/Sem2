@@ -1,11 +1,15 @@
+#include "game.h"
 #include "menu.h"
+#include "button.h"
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(1200,800),"New Game",sf::Style::Titlebar | sf::Style::Close);
-    menu Game(window);
+    menu game{};
+
     while (window.isOpen()) {
-        Game.eventhandle(window);
-        Game.render(window);
+        game.eventhandle(window);
+        game.update();
+        game.render(window);
     }
     return 0;
 }
