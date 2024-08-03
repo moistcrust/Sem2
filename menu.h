@@ -15,13 +15,14 @@ public:
     Button button;
     std::vector<Button> buttons;
     sf::Font font;
+    float buttonscale[2];
 
     sf::Texture music_texture;
     sf::Music music;
     Button music_button;
     bool isMute;
 
-    int mouse_pos[2];
+    int mouse_pos[2]{};
     bool isMousedpressed;
 
     void update(sf::RenderWindow &window) override;

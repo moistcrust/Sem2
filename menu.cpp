@@ -15,9 +15,20 @@ void menu::update(sf::RenderWindow &window) {
     animate_background();
     for (auto& button: buttons) {
         if(isMousedpressed) {
-          if (button.isClicked(mouse_pos[0],mouse_pos[1])) {
-              continue;
-          }
+            if (button.isClicked(mouse_pos[0],mouse_pos[1])) {
+                if(not button.isMoved) {
+                    button.setScale(1.1 * buttonscale[0], 1.1 * buttonscale[0]);
+                    button.buttonMove(-10,-3);
+                    button.isMoved = true;
+                }
+            }
+        }
+        else {
+            if(button.isMoved) {
+                button.buttonMove(10,2);
+                button.isMoved = false;
+                button.setScale(buttonscale[0],buttonscale[1]);
+            }
         };
         button.animate();
     }
@@ -79,6 +90,8 @@ void menu::animate_background() {
 
 
 menu::menu() {
+    mouse_pos[0] = 0;
+    mouse_pos[1] = 0;
     background_texture.loadFromFile("background.png");
     background_sprite.setTexture(background_texture);
     background_sprite.setPosition(bg_pos[0], bg_pos[1]);
@@ -93,10 +106,10 @@ menu::menu() {
 
     button_texture.loadFromFile("button.png");
     button.setTexture(button_texture);
-
+    buttonscale[0] = 200/button.sprite.getLocalBounds().width;
+    buttonscale[1] = 60/button.sprite.getLocalBounds().height;
     for (int i = 0; i < 4; i++) {
-        buttons.emplace_back(button_texture, 500, 200 + 80 * i, 200 / button.sprite.getLocalBounds().width,
-                             60 / button.sprite.getLocalBounds().height);
+        buttons.emplace_back(button_texture, 500, 200 + 80 * i,buttonscale[0],buttonscale[1] );
         buttons[i].setText("Game", font);
     }
     isMute = false;
