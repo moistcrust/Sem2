@@ -1,58 +1,75 @@
-//
-// Created by NITRO on 8/2/2024.
-//
-
 #include "menu.h"
 
-void menu::update(sf::RenderWindow &window) {
+void menu::update() {
     if (isMute) {
         music.setVolume(0);
     }
     else {
         music.setVolume(100);
     }
-    window.clear(sf::Color::Black);
-    animate_background();
-    for (auto& button: buttons) {
-        if(isMousedpressed) {
-            if (button.isClicked(mouse_pos[0],mouse_pos[1])) {
-                if(not button.isMoved) {
-                    button.setScale(1.1 * buttonscale[0], 1.1 * buttonscale[0]);
-                    button.buttonMove(-10,-3);
+    if (isMousereleased) {
+        int i = 1;
+        isMousepressed = false;
+        for (auto& button : buttons) {
+            if (button.isClicked(click_pos_x, click_pos_y) and button.isClicked(mouse_pos[0], mouse_pos[1])) {
+                changestate = i;
+            }
+            i++;
+        }
+        isMousereleased = false;
+    }
+    if (isMousepressed) {
+        for (auto& button : buttons) {
+            if (button.isClicked(mouse_pos[0], mouse_pos[1])) {
+                if (not button.isMoved) {
+                    button.setScale(1.1, 1.1);
+                    button.text.setScale(1.1, 1.1);
                     button.isMoved = true;
                 }
             }
             else {
-                if(button.isMoved) {
-                    button.buttonMove(10,3);
+                if (button.isMoved) {
                     button.isMoved = false;
-                    button.setScale(buttonscale[0],buttonscale[1]);
+                    button.setScale(1, 1);
+                    button.text.setScale(1, 1);
                 }
             }
         }
-        else {
-            if(button.isMoved) {
-                button.buttonMove(10,3);
+    }
+    else {
+        for (auto& button : buttons) {
+            if (button.isMoved) {
                 button.isMoved = false;
-                button.setScale(buttonscale[0],buttonscale[1]);
+                button.setScale(1, 1);
+                button.text.setScale(1, 1);
             }
-        };
-        button.animate();
+        }
+    }
+    if (menuClock.getElapsedTime().asMilliseconds() >= 5) {
+        for (auto& button : buttons) {
+            button.animate();
+        }
+        animate_background();
+    }
+    
+}
+
+
+void menu::render() {
+    if (menuClock.getElapsedTime().asMilliseconds() >= 5) {
+        menuClock.restart();
+        window.clear(sf::Color::Black);
+        window.draw(background_sprite);
+        window.draw(music_button.sprite);
+        for (auto& button : buttons) {
+            window.draw(button.sprite);
+            window.draw(button.text);
+        }
+        window.display();
     }
 }
 
-void menu::render(sf::RenderWindow &window) {
-    Game::render(window);
-    window.draw(background_sprite);
-    window.draw(music_button.sprite);
-    for (auto& button : buttons) {
-        window.draw(button.sprite);
-        window.draw(button.text);
-    }
-    window.display();
-}
-
-void menu::eventhandle(sf::RenderWindow &window) {
+void menu::eventhandle() {
     while (window.pollEvent(ev)) {
         mouse_pos[0] = sf::Mouse::getPosition(window).x;
         mouse_pos[1] = sf::Mouse::getPosition(window).y;
@@ -61,67 +78,80 @@ void menu::eventhandle(sf::RenderWindow &window) {
         }
         if (ev.type == sf::Event::MouseButtonPressed) {
             if (ev.mouseButton.button == sf::Mouse::Left) {
-                isMousedpressed = true;
-                if (music_button.isClicked(mouse_pos[0],mouse_pos[1])) {
-                    isMute = (not isMute);
+                if (not isMousepressed) {
+                    click_pos_x = mouse_pos[0];
+                    click_pos_y = mouse_pos[1];
                 }
+                isMousepressed = true;
             }
         }
         if (ev.type == sf::Event::MouseButtonReleased) {
             if (ev.mouseButton.button == sf::Mouse::Left) {
-                isMousedpressed = false;
+                isMousereleased = true;
+                if (music_button.isClicked(click_pos_x, click_pos_x) and music_button.isClicked(mouse_pos[0], mouse_pos[1])) {
+                    isMute = (not isMute);
+                }
             }
         }
     }
 }
 
+int menu::getchangestate() {
+    return changestate;
+}
+
 void menu::animate_background() {
     // Define the movement boundaries
-    int max_x = background_texture.getSize().x * 0.4 - 1200;
-    int max_y = background_texture.getSize().y * 0.4 - 800;
+    int max_x = background_texture.getSize().x * 0.4 - window.getSize().x;
+    int max_y = background_texture.getSize().y * 0.4 - window.getSize().y;
 
     if (-bg_pos[0] < max_x && int(bg_pos[1]) == 0) {
-        bg_pos[0] -= 0.1; // Move right
-    } else if (int(-bg_pos[0]) == max_x && -bg_pos[1] < max_y) {
-        bg_pos[1] -= 0.1; // Move down
-    } else if (-bg_pos[0] > 0 && int(-bg_pos[1]) == max_y) {
-        bg_pos[0] += 0.1; // Move left
-    } else if (int(-bg_pos[0]) == 0 && -bg_pos[1] > 0) {
-        bg_pos[1] += 0.1; // Move up
+        bg_pos[0] -= 0.5; // Move right
     }
-
+    else if (int(-bg_pos[0]) == max_x && -bg_pos[1] < max_y) {
+        bg_pos[1] -= 0.5; // Move down
+    }
+    else if (-bg_pos[0] > 0 && int(-bg_pos[1]) == max_y) {
+        bg_pos[0] += 0.5; // Move left
+    }
+    else if (int(-bg_pos[0]) == 0 && -bg_pos[1] > 0) {
+        bg_pos[1] += 0.5; // Move up
+    }
     background_sprite.setPosition(bg_pos[0], bg_pos[1]);
 }
 
 
 
 
-menu::menu() {
+menu::menu(sf::RenderWindow& window) : Game(window) {
+    changestate = 0;
     mouse_pos[0] = 0;
     mouse_pos[1] = 0;
-    background_texture.loadFromFile("background.png");
+    background_texture.loadFromFile("../resources/background.png");
     background_sprite.setTexture(background_texture);
     background_sprite.setPosition(bg_pos[0], bg_pos[1]);
     background_sprite.setScale(.4, .4);
 
-    font.loadFromFile("KnightWarrior-w16n8.otf");
-
-    music_texture.loadFromFile("speaker.png");
-    music_button.setTexture(music_texture);
-    music_button.setPosition(0,0);
-    music_button.setScale(50/music_button.sprite.getLocalBounds().width,50/music_button.sprite.getLocalBounds().height);
-
-    button_texture.loadFromFile("button.png");
+    font.loadFromFile("../resources/KnightWarrior-w16n8.otf");
+    button_texture.loadFromFile("../resources/button.png");
     button.setTexture(button_texture);
-    buttonscale[0] = 200/button.sprite.getLocalBounds().width;
-    buttonscale[1] = 60/button.sprite.getLocalBounds().height;
+
+    music_texture.loadFromFile("../resources/speaker.png");
+    music_button.setTexture(music_texture);
+    music_button.setPosition(0, 0);
+    music_button.setScale(50 / music_button.sprite.getLocalBounds().width, 50 / music_button.sprite.getLocalBounds().height);
+
     for (int i = 0; i < 4; i++) {
-        buttons.emplace_back(button_texture, 500, 200 + 80 * i,buttonscale[0],buttonscale[1] );
+        buttons.emplace_back(button_texture, 600, 200 + 120 * i);
+        buttons[i].spritescale[0] = 200 / button.sprite.getLocalBounds().width;
+        buttons[i].spritescale[1] = 60 / button.sprite.getLocalBounds().height;
         buttons[i].setText("Game", font);
+        buttons[i].setScale(1, 1);
     }
+    isMousepressed = false;
+    isMousereleased = false;
+    music.openFromFile("../resources/sound.ogg");
     isMute = false;
-    isMousedpressed = false;
-    music.openFromFile("audio.ogg");
     music.setLoop(true);
     music.play();
 }

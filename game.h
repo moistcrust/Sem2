@@ -10,9 +10,12 @@
 class Game {
 public:
     sf::Event ev{};
-    virtual void eventhandle(sf::RenderWindow &window);
-    virtual void update(sf::RenderWindow &window);
-    virtual void render(sf::RenderWindow &window);
+    sf::RenderWindow& window;
+    virtual void eventhandle();
+    virtual void update();
+    virtual void render();
+    virtual int getchangestate();
+    explicit Game(sf::RenderWindow&);
     virtual ~Game();
 };
 

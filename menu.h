@@ -1,17 +1,19 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include "Button.h"
+#include "button.h"
 #include "game.h"
-class menu final : public Game{
+
+class menu : public Game {
 
 public:
-    float bg_pos[2] = {0,0};
+    float bg_pos[2] = { 0,0 };
+    int changestate;
 
     sf::Texture background_texture;
     sf::Sprite background_sprite;
-    sf::Texture button_texture;
 
+    sf::Texture button_texture;
     Button button;
     std::vector<Button> buttons;
     sf::Font font;
@@ -19,17 +21,22 @@ public:
 
     sf::Texture music_texture;
     sf::Music music;
-    Button music_button;
     bool isMute;
+    Button music_button;
+
+    sf::Clock menuClock;
 
     int mouse_pos[2]{};
-    bool isMousedpressed;
+    bool isMousepressed;
+    bool isMousereleased;
+    int click_pos_x{}, click_pos_y{};
 
-    void update(sf::RenderWindow &window) override;
-    void render(sf::RenderWindow &window) override;
-    void eventhandle(sf::RenderWindow &window) override;
+    void update() override;
+    void render() override;
+    void eventhandle() override;
+    int getchangestate() override;
     void animate_background();
-    menu();
+    explicit menu(sf::RenderWindow& window);
     ~menu() override;
 };
 

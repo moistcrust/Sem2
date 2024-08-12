@@ -1,15 +1,28 @@
-#include "game.h"
+#include "StateManager.h"
 #include "menu.h"
-#include "button.h"
+#include "missile.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(1200,800),"New Game",sf::Style::Titlebar | sf::Style::Close);
-    Game *game = new menu;
+    sf::RenderWindow window(sf::VideoMode(1200, 800), "New Game", sf::Style::Titlebar | sf::Style::Close);
+    StateManager stateManager(window);
+
+    stateManager.pushState(std::make_unique<menu>(window));
+
+    sf::Clock clock;
     while (window.isOpen()) {
-        game->eventhandle(window);
-        game->update(window);
-        game->render(window);
+        stateManager.handleEvents();
+        stateManager.update();
+        stateManager.render();
+        if (!stateManager.states.empty() && stateManager.states.top()->getchangestate() !=0) {
+            int change = stateManager.states.top()->getchangestate();
+            if (change == 1) {
+                stateManager.changeState(std::make_unique<missile>(window));
+            }
+            else if (change == -1) {
+                stateManager.changeState(std::make_unique<menu>(window));
+            }
+        }
     }
-    delete game;
+
     return 0;
 }
